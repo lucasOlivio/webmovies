@@ -2,29 +2,46 @@
 
 {% block content %}
 <div id="divLista">
-    <input name="filme" type="text" placeholder="Nome do filme">
-    <ul id="double">
-        <li>
-            <div>
-                <img src="">
-                <h4>Filme 1</h4>
-                <p>Data 23/08/1996</p>
-            </div>
-        </li>
-        <li>
-            <div>
-                <img src="">
-                <h4>Filme 2</h4>
-                <p>Data 22/08/1996</p>
-            </div>
-        </li>
-        <li>
-            <div>
-                <img src="">
-                <h4>Filme 3</h4>
-                <p>Data 24/08/1996</p>
-            </div>
-        </li>
-    </ul>
+    <form method="POST" action="{{url_for('addFilm')}}" class="formatMiddle filme">
+        <div class="input-group ">
+            <input class="form-control" name="filme" type="text" placeholder="Nome do filme">
+            {{form.csrf_token}}
+            <span class="input-group-addon">
+                <input class="form-control" type="submit" value="Adicionar filme" name="addFilm">
+            </span>
+        </div>
+    </form>
+   
+    <div class="pre-scrollable card" id="listaFilmes">
+        <div class="card-body">
+            <ul id="double">
+                {% for filme in filmes %}
+                    <li class="filme {{ 'visto' if filme['visto'] else 'naoVisto' }}">
+                        <img src="{{ filme['posterPath'] }}">
+                        <h4>{{ filme['filme'] }}</h4>
+                        <div class="button-container">
+                            {% if not filme['visto'] %}
+                                <form method="POST" action="{{url_for('marcarVisto')}}">
+                                    <input type="text" name="filme" value="{{ filme['filme'] }}" style="display:none">
+                                    <input type="text" name="visto" value="true" style="display:none">
+                                    <button type="submit" class="btn btn-success"><i class="far fa-eye"></i></button>
+                                </form>
+                            {% else %}
+                                <form method="POST" action="{{url_for('marcarVisto')}}">
+                                    <input type="text" name="filme" value="{{ filme['filme'] }}" style="display:none">
+                                    <input type="text" name="visto" value="false" style="display:none">
+                                    <button type="submit" class="btn btn-light"><i class="black far fa-eye-slash"></i></button>
+                                </form>
+                            {% endif %}
+                            <form method="POST" action="{{url_for('removerFilme')}}">
+                                <input type="text" name="filme" value="{{ filme['filme'] }}" style="display:none">
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </div>
 {% endblock %}
