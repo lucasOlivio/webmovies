@@ -1,0 +1,59 @@
+body{
+    background-color: #128c7e;
+    text-align: center;
+}
+
+#titulo{
+    color: antiquewhite;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 84px;
+    padding-top: 4%;
+    padding-bottom: 5%;
+}
+
+#btnLogout{
+    float: right;
+    margin: 5px;
+    padding: 3px;
+}
+
+form{
+    width: 25%;
+    padding-top: 5%;
+    display: inline-block;
+}
+
+input{
+    margin:2px;
+    width: 100%
+}
+
+input[name="login"]{
+    width: 50%;
+}
+
+input[name="filme"]{
+    width: 50%;
+}
+
+#divLista{
+    width: 75%;
+    display: inline-block;
+}
+
+ul{
+  width:760px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+
+li{
+  line-height:1.5em;
+  border:1px solid #ccc;
+  float:left;
+  display:inline;
+}
+
+#double li{ 
+    width:50%;
+}
