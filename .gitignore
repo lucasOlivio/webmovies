@@ -217,15 +217,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-### Flutter ###
-# Flutter/Dart/Pub related
-**/doc/api/
-.dart_tool/
-.flutter-plugins
-.packages
-.pub-cache/
-.pub/
-
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
@@ -252,12 +243,6 @@ dmypy.json
 **/ios/**/profile
 **/ios/**/xcuserdata
 **/ios/.generated/
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Generated.xcconfig
-**/ios/Flutter/app.flx
-**/ios/Flutter/app.zip
-**/ios/Flutter/flutter_assets/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 
@@ -266,7 +251,6 @@ dmypy.json
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
