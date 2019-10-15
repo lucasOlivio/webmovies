@@ -10,7 +10,7 @@ body{
     padding-top: 5%;
 }
 
-#btnLogout{
+.btntop{
     float: right;
     margin: 5px;
     padding: 3px;
@@ -28,7 +28,7 @@ input{
 
 .formatMiddle{
     width: 50%;
-    margin: 0 auto 10px auto;
+    margin: 5px auto 5px auto;
 }
 
 #divLista{

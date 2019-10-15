@@ -50,15 +50,6 @@ class _HomePageState extends State<HomePage> {
                 labelText: "E-mail"
             ),
             keyboardType: TextInputType.emailAddress,
-//            validator: (String arg) {
-//              Pattern pattern =  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-//              RegExp regex = RegExp(pattern);
-//              if((arg.length == 0) || !regex.hasMatch(arg)){
-//                return "Digite um e-mail válido";
-//              }else{
-//                return null;
-//              }
-//            },
             onSaved: (String val) {
               _email = val;
             },
@@ -70,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             ),
             obscureText: true,
             validator: (String arg) {
-              if(arg.length < 6) {
+              if(arg.length < 5) {
                 return "Digite uma senha válida";
               }else{
                 return null;
@@ -91,12 +82,28 @@ class _HomePageState extends State<HomePage> {
             ),
             color: Colors.teal,
             textColor: Colors.white,
-            onPressed: _validarLogin,
+              onPressed: () {
+                _validarLogin(0);
+              }
+          ),
+          RaisedButton(
+            child: Text(
+              "Novo usuário",
+              semanticsLabel: "Novo usuário",
+              style: new TextStyle(
+                fontSize: 25.0,
+              ),
+            ),
+            color: Colors.teal,
+            textColor: Colors.white,
+            onPressed: () {
+              _validarLogin(1);
+            }
           ),
         ]);
   }
 
-  void _validarLogin() async {
+  void _validarLogin(int mode) async {
     bool _loginOK = true;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -109,24 +116,41 @@ class _HomePageState extends State<HomePage> {
 
     if(_loginOK){
       var loading = buildLoading(context);
-
+      var response;
       try{
         var login = {'email':_email, 'senha': _password};
-        var response = await api.requestAPI("login/", "POST", login);
 
+
+        if(mode == 0){
+          response = await api.requestAPI("login/", "POST", login);
+        }else{
+          response = await api.requestAPI("addusuario/", "POST", login);
+
+          if(response['status']=='inserido'){
+            print("Usuário logado!");
+            response = await api.requestAPI("login/", "POST", login);
+          }else{
+            print(response['status']);
+            Navigator.pop(context, loading);
+            buildAlert(context,"Erro!",response['status']);
+            return;
+          }
+        }
+        print(response);
         if(response['id']!=null){
           print("Usuário logado!");
           globals.id = response['id'];
+          globals.user = _email;
           Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => MainScreenTheme()));
         }else{
-          print("Usuário não encontrado!");
+          print(response[0]);
           Navigator.pop(context, loading);
-          buildAlert(context,"Usuário não encontrado!","Email/Senha incorretos");
+          buildAlert(context,"Erro!",response[0]);
         }
       }catch(e){
         print(e.toString());
         Navigator.pop(context, loading);
-        buildAlert(context,"Ocorreu um erro!","Tente novamente em instantes");
+        buildAlert(context,"Ocorreu um erro!",response[0]);
       }
     }
   }

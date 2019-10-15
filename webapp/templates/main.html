@@ -19,6 +19,7 @@
                     <li class="filme {{ 'visto' if filme['visto'] else 'naoVisto' }}">
                         <img src="{{ filme['posterPath'] }}">
                         <h4>{{ filme['filme'] }}</h4>
+                        <div id="formEdit"></div>
                         <div class="button-container">
                             {% if not filme['visto'] %}
                                 <form method="POST" action="{{url_for('marcarVisto')}}">
@@ -37,6 +38,7 @@
                                 <input type="text" name="filme" value="{{ filme['filme'] }}" style="display:none">
                                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                             </form>
+                            <button type="submit" class="btn btn-primary" id="editFilm" data-id="{{ filme['filme'] }}"><i class="fas fa-edit"></i></button>
                         </div>
                     </li>
                 {% endfor %}
@@ -44,4 +46,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

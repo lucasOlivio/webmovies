@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="divLista">
+    <div class="pre-scrollable card" id="listaFilmes">
+        <div class="card-body">
+            <ul id="double">
+                {% for user in users %}
+                    {% if not user['email'] == 'admin' %}
+                        <li>
+                            <div class="row">
+                                <div class="col-sm-6" style="padding-top: 10px;padding-bottom: 10px;">
+                                    <h4 style="padding: 0px;">#{{ user['id'] }} - {{ user['email'] }}</h4>
+                                </div>
+                                <div class="col-sm-6" style="padding-top: 10px;">
+                                    <div class="button-container">
+                                        <form method="POST" action="{{url_for('removerUser')}}">
+                                            <input type="text" name="user" value="{{ user['id'] }}" style="display:none">
+                                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div>
+        <a type="button" href="{{ url_for('main') }}" class="btn btn-primary btntop">Voltar</a>
+    </div>
+</div>
+{% endblock %}

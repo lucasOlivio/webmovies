@@ -27,15 +27,23 @@ def login():
             'email': form.email.data,
             'senha': form.senha.data
         }
-
-        resp = json.loads(requests.post('http://localhost:2000/login', post).text)
+        if request.form['login'] == 'Login':
+            resp = json.loads(requests.post('http://localhost:2000/login', post).text)
+        elif request.form['login'] == 'Novo usuário':
+            resp = json.loads(requests.post('http://localhost:2000/addusuario', post).text)
+            if resp['status'] == 'inserido':
+                resp = json.loads(requests.post('http://localhost:2000/login', post).text)
+            else:
+                flash(resp['status'], category='danger')
+                return render_template('login.html',form=form)
         try:
             print('OK')
             session['id'] = resp['id']
+            session['user'] = form.email.data
             session['logged_in'] = True
             return redirect(url_for('main'))
         except:
-            msg = resp[0]
+            msg = resp[0]            
     flash(msg, category='danger')
     print('NOT OK')
     return render_template('login.html',form=form)
@@ -90,13 +98,48 @@ def removerFilme():
             return redirect(url_for('main'))
     return redirect(url_for('index'))
 
+@app.route('/removerUser', methods=['POST','GET'])
+def removerUser():
+    if session['logged_in']:
+        if request.method == 'POST':
+            post = {
+                'id': request.form['user']
+            }
+            resp = json.loads(requests.delete('http://localhost:2000/removeusuario', data=post).text)
+
+            return redirect(url_for('listarusers'))
+    return redirect(url_for('index'))
+
+@app.route('/editarFilme', methods=['POST','GET'])
+def editarFilme():
+    if session['logged_in']:
+        if request.method == 'POST':
+            post = {
+                'usuario': session['id'],
+                'filme': request.form['filme_old'],
+                'novo_filme': request.form['filme']
+            }
+            resp = json.loads(requests.put('http://localhost:2000/updatefilme', post).text)
+            sleep(1)
+            return redirect(url_for('main'))
+    return redirect(url_for('index'))
+
+@app.route('/listarusers', methods=['GET'])
+def listarusers():
+    if session['logged_in']:
+        resp = json.loads(requests.get('http://localhost:2000/usuarios', ).text)
+        return render_template('users.html',users=resp)
+    return redirect(url_for('index'))
+
 @app.route('/main')
 def main():
     if session['logged_in']:
         form = Filme()
-        resp = json.loads(requests.get('http://localhost:2000/filmes?usuario='+str(session['id']), ).text)
+        respRanking = json.loads(requests.get('http://localhost:2000/rankingfilmes').text)
 
-        return render_template('main.html',form=form,filmes=resp)
+        respFilmes = json.loads(requests.get('http://localhost:2000/filmes?usuario='+str(session['id']), ).text)
+
+        return render_template('main.html',form=form,filmes=respFilmes, ranking=respRanking)
     return redirect(url_for('index'))
 
 if __name__ == "__main__":

@@ -16,7 +16,35 @@
 </head>
 <body>
     {% if session['logged_in'] %}
-        <a type="button" href="{{ url_for('logout') }}" class="btn btn-danger removerFilme" id="btnLogout">Logout</a>
+        <a type="button" href="{{ url_for('logout') }}" class="btn btn-danger btntop">Logout</a>
+        {% if session['user'] == 'admin' %}
+            <a type="button" href="{{ url_for('listarusers') }}" class="btn btn-primary btntop">Listar usuários</a>
+        {% endif %}
+        {% if ranking %}
+            <div class="modal fade" id="modalRanking" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ranking de filmes mais vistos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                        <ul>
+                            {% for filme in ranking %}
+                                <li style="border: 0px;">#{{ loop.index }} {{ filme['key'] }} - Visto {{ filme['value'] }} vezes!</li>
+                            {% endfor %}
+                        </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a data-toggle="modal" data-target="#modalRanking" type="button" class="btn btn-success btntop" id="ranking"><i class="fas fa-trophy"></i></a>
+        {% endif %}
     {% endif %}
     <h1 id="titulo">
         WEBMOVIES

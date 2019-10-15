@@ -5,6 +5,7 @@
  */
 package principal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,15 +16,21 @@ import java.util.Map;
 public class User {
     
     private Object id;
-    private List<Filme> filmes;
+    private String email;
+    private List<Filme> filmes = new ArrayList<Filme>();
     HttpConn request = new HttpConn();
-    public User(Object id){
+    public User(Object id, String email){
         this.id = id;
+        this.email = email;
         this.loadFilmes();
     }
     
     public Object getId(){
         return this.id;
+    }
+    
+    public String getEmail(){
+        return this.email;
     }
     
     public void loadFilmes(){

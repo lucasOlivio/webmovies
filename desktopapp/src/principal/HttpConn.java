@@ -26,6 +26,90 @@ import java.util.List;
 public class HttpConn {
 
 	private final String USER_AGENT = "Mozilla/5.0";
+        
+        public List<Ranking> sendGetRanking(String url) throws Exception {
+		
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		return stringToListRanking(response.toString());
+
+	}
+        
+        public List<Ranking> stringToListRanking(String arrayAsString) {
+            ObjectMapper mapper = new ObjectMapper();
+            List<Ranking> ranking = null;
+
+            try {
+                System.out.println(arrayAsString);
+                ranking = Arrays.asList(mapper.readValue(arrayAsString, Ranking[].class));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            return ranking;
+        }
+        
+        public List<ListUser> sendGetUsers(String url) throws Exception {
+		
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		return stringToListUser(response.toString());
+
+	}
+        
+        public List<ListUser> stringToListUser(String arrayAsString) {
+            ObjectMapper mapper = new ObjectMapper();
+            List<ListUser> users = null;
+
+            try {
+                System.out.println(arrayAsString);
+                users = Arrays.asList(mapper.readValue(arrayAsString, ListUser[].class));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            return users;
+        }
 
 	// HTTP GET request
 	public List<Filme> sendGet(String url) throws Exception {
