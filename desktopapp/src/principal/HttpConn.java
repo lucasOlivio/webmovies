@@ -59,7 +59,6 @@ public class HttpConn {
             List<Ranking> ranking = null;
 
             try {
-                System.out.println(arrayAsString);
                 ranking = Arrays.asList(mapper.readValue(arrayAsString, Ranking[].class));
 
             } catch (IOException e) {
@@ -101,7 +100,6 @@ public class HttpConn {
             List<ListUser> users = null;
 
             try {
-                System.out.println(arrayAsString);
                 users = Arrays.asList(mapper.readValue(arrayAsString, ListUser[].class));
 
             } catch (IOException e) {
